@@ -1,3 +1,4 @@
+import 'package:dharma_daily/views/pages.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -7,7 +8,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
       ),
       home: const MyHomePage(title: 'Dharma Daily'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -37,8 +38,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Color _colorMeditation = Colors.grey;
 
   final tabs = [
-    Center(child: Text("Paritta")),
-    Center(child: Text("Meditation"))
+    Paritta(),
+    Meditation()
   ];
 
   @override
@@ -54,30 +55,22 @@ class _MyHomePageState extends State<MyHomePage> {
         items: [
 
           BottomNavigationBarItem(
-            icon: Ink(
-              child: InkWell(
-              child: Container(
-                height: 25,
-                child: Image.asset(
-                  'lib/icons/tripitaka.png', 
-                  color: _colorTripitaka
-                ),
-              ),
+            icon: Container(
+              height: 25,
+              child: Image.asset(
+                'lib/icons/tripitaka.png', 
+                color: _colorTripitaka
               ),
             ),
             label: "Paritta",
           ),
 
           BottomNavigationBarItem(
-            icon: Ink(
-              child: InkWell(
-              child: Container(
-                height: 25,
-                child: Image.asset(
-                  'lib/icons/meditation.png', 
-                  color: _colorMeditation
-                ),
-              ),
+            icon: Container(
+              height: 25,
+              child: Image.asset(
+                'lib/icons/meditation.png', 
+                color: _colorMeditation
               ),
             ),
             label: "Meditation"
