@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Color _colorMeditation = Colors.grey;
 
   final tabs = [
-    Paritta(),
+    Listparitta(),
     Meditation()
   ];
 
