@@ -36,7 +36,7 @@ class _SplashState extends State<Splash> {
               "Dharma Daily",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w600
+                fontWeight: FontWeight.w500
               ),
             ),
           )

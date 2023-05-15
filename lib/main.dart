@@ -13,10 +13,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Dharma Daily',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: Colors.orange
       ),
       home: Splash(),
-      // home: const MyHomePage(title: 'Dharma Daily'),
       debugShowCheckedModeBanner: false,
     );
   }
