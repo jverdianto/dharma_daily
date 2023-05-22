@@ -19,8 +19,6 @@ class _ParittaState extends State<Paritta> {
     controller = PageController(initialPage: widget.selectedIndex);
   }
 
-  // final controller = PageController(initialPage: 0);
-
   @override
   void dispose(){
     controller.dispose();
