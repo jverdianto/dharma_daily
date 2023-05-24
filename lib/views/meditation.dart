@@ -9,6 +9,7 @@ class Meditation extends StatefulWidget {
 
 class _MeditationState extends State<Meditation> {
   late AudioPlayer _audioPlayer;
+  late AudioPlayer _audioPlayer2;
 
   final _playlist = ConcatenatingAudioSource(
     children: [
@@ -59,11 +60,24 @@ class _MeditationState extends State<Meditation> {
           duration ?? Duration.zero
         )
       );
+
+  Stream<PositionDataBowl> get _positionDataStream2 =>
+      Rx.combineLatest3<Duration, Duration, Duration?, PositionDataBowl>(
+        _audioPlayer2.positionStream,
+        _audioPlayer2.bufferedPositionStream,
+        _audioPlayer2.durationStream,
+        (position, bufferedPosition, duration) => PositionDataBowl(
+          position, 
+          bufferedPosition, 
+          duration ?? Duration.zero
+        )
+      );
   
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
+    _audioPlayer2 = AudioPlayer()..setAsset('lib/audios/singing_bowl.mp3');
     _init();
   }
 
@@ -75,6 +89,7 @@ class _MeditationState extends State<Meditation> {
   @override
   void dispose() {
     _audioPlayer.dispose();
+    _audioPlayer2.dispose();
     super.dispose();
   }
 
@@ -125,8 +140,44 @@ class _MeditationState extends State<Meditation> {
                 }
               ),
             ),
-            const SizedBox(height: 20),
-            Controls(audioPlayer: _audioPlayer)
+            const SizedBox(height: 8),
+            Controls(audioPlayer: _audioPlayer),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20,0,20,0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ControlsBowl(audioPlayer2: _audioPlayer2),
+                  Container(
+                    width: 130,
+                    height: 20,
+                    child: StreamBuilder<PositionDataBowl>(
+                    stream: _positionDataStream2,
+                    builder: (context, snapshot) {
+                      final positionData = snapshot.data;
+                      return ProgressBar(
+                        barHeight: 8,
+                        baseBarColor: Colors.grey[600],
+                        bufferedBarColor: Colors.grey,
+                        progressBarColor: Colors.orange,
+                        thumbColor: Colors.orange,
+                        timeLabelTextStyle: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600
+                        ),
+                        progress: positionData?.position ?? Duration.zero, 
+                        buffered: positionData?.bufferedPosition ?? Duration.zero,
+                        total: positionData?.duration ?? Duration.zero,
+                        onSeek: _audioPlayer2.seek,
+                      );
+                    }
+                                ),
+                              ),
+                ],
+              ),
+            ),
+            
           ],
         ),
       ),
@@ -136,6 +187,18 @@ class _MeditationState extends State<Meditation> {
 
 class PositionData {
   const PositionData(
+    this.position,
+    this.bufferedPosition,
+    this.duration
+  );
+
+  final Duration position;
+  final Duration bufferedPosition;
+  final Duration duration;
+}
+
+class PositionDataBowl {
+  const PositionDataBowl(
     this.position,
     this.bufferedPosition,
     this.duration
@@ -177,8 +240,8 @@ class MediaMetaData extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: CachedNetworkImage(
               imageUrl: imageUrl,
-              height: 300,
-              width: 300,
+              height: 250,
+              width: 250,
               fit: BoxFit.cover
             )
           ),
@@ -188,7 +251,7 @@ class MediaMetaData extends StatelessWidget {
           title,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 22,
+            fontSize: 20,
             fontWeight: FontWeight.bold
           ),
           textAlign: TextAlign.center,
@@ -198,7 +261,7 @@ class MediaMetaData extends StatelessWidget {
           artist,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 20
+            fontSize: 18
           ),
           textAlign: TextAlign.center,
         ),
@@ -260,6 +323,61 @@ class Controls extends StatelessWidget {
           color: Colors.black,
           icon: Icon(Icons.skip_next_rounded)
         ),
+      ],
+    );
+  }
+
+}
+
+class ControlsBowl extends StatelessWidget {
+  const ControlsBowl({
+    super.key,
+    required this.audioPlayer2,
+  });
+
+  final AudioPlayer audioPlayer2;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          "Singing Bowl",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20
+          ),
+        ),
+        StreamBuilder<PlayerState>(
+          stream: audioPlayer2.playerStateStream,
+          builder: (context, snapshot) {
+            final playerState = snapshot.data;
+            final processingState = playerState?.processingState;
+            final playing = playerState?.playing;
+            if (!(playing ?? false)) {
+              return IconButton(
+                onPressed: audioPlayer2.play, 
+                iconSize: 50,
+                color: Colors.black,
+                icon: const Icon(Icons.play_arrow_rounded)
+              );
+            } else if (processingState != ProcessingState.completed) {
+              return IconButton(
+                onPressed: audioPlayer2.pause, 
+                iconSize: 50,
+                color: Colors.black,
+                icon: const Icon(Icons.pause_rounded)
+              );
+            }
+            return const Icon(
+              Icons.play_arrow_rounded,
+              size: 50,
+              color: Colors.black,
+            );
+          }
+        )
       ],
     );
   }

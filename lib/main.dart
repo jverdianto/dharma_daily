@@ -1,7 +1,12 @@
 import 'package:dharma_daily/views/pages.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  // await JustAudioBackground.init(
+  //   androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+  //   androidNotificationChannelName: 'Audio playback',
+  //   androidNotificationOngoing: true
+  // );
   runApp(const MyApp());
 }
 
