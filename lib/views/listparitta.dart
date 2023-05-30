@@ -8,20 +8,7 @@ class Listparitta extends StatefulWidget {
 }
 
 class _ListparittaState extends State<Listparitta> {
-  List<Text> judulParitta = [
-    Text("1. PEMBUKAAN"),
-    Text("2. NAMAKĀRA GĀTHĀ"),
-    Text("3. TISARAṆA"),
-    Text("4. PAÑCASĪLA"),
-    Text("5. BUDDHĀNUSSATI"),
-    Text("6. DHAMMĀNUSSATI"),
-    Text("7. SAṄGHĀNUSSATI"),
-    Text("8. SACCAKIRIYĀ GĀTHĀ"),
-    Text("9. KARAṆĪYA METTĀ SUTTA"),
-    Text("10. DHAMMADESANĀ"),
-    Text("11. ETTĀVATĀ"),
-    Text("12. PENUTUP")
-  ];
+  
 
   List<Text> isiParitta = [
     Text("Memberi tanda Puja Bakti dimulai (dengan gong, lonceng, dan sebagainya). Pemimpin Puja Bakti menyalakan lilin dan dupa (hio), kemudian meletakkan dupa di tempatnya, sementara hadirin duduk bertumpu lutut dan bersikap añjali. Setelah dupa diletakkan di tempatnya, Pemimpin Puja Bakti dan para hadirin menghormat dengan menundukkan kepala (bersikap añjali dengan menyentuh dahi)."),
